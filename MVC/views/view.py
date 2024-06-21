@@ -1,20 +1,22 @@
-from tkinter import Tk, Canvas, Entry, Button, PhotoImage, Label, Toplevel
-from tkinter import messagebox
-
+from tkinter import Tk, Canvas, Entry, Button, PhotoImage, Label, Toplevel, StringVar, OptionMenu
+import pathlib
+from pathlib import Path
 class View:
     def __init__(self, controller):
         self.controller = controller
         self.window = Tk()
         self.window.geometry("800x800")
         self.window.configure(bg="#F39421")
+        self.button_images = {}  # Dicionário para manter a referência das imagens
         self.login_window()
-        
+
     def relative_to_assets(self, path: str) -> str:
-        from pathlib import Path
         script_dir = Path(__file__).parent
-        assets_path = script_dir.parent / "assets" / "img_sistema"  # Corrigido para img_sistema
-        return str(assets_path / path)
-    
+        assets_path = script_dir.parent / "assets" / "img"
+        full_path = assets_path / path
+        print(full_path)  # Adicione este print para depuração
+        return str(full_path)
+
     def login_window(self):
         canvas = Canvas(
             self.window,
@@ -87,9 +89,10 @@ class View:
         )
 
         # Add buttons
-        button_img_login = PhotoImage(
-            file=self.relative_to_assets("button_img_login.png")
-        )
+        button_img_login_path = self.relative_to_assets("button_img_login.png")
+        button_img_login = PhotoImage(file=button_img_login_path)
+        self.button_images["login"] = button_img_login  # Mantenha a referência da imagem
+
         button_login = Button(
             self.window,
             image=button_img_login,
@@ -104,9 +107,10 @@ class View:
             height=78.0
         )
 
-        button_img_register = PhotoImage(
-            file=self.relative_to_assets("button_2.png")
-        )
+        button_img_register_path = self.relative_to_assets("register_button.png")
+        button_img_register = PhotoImage(file=button_img_register_path)
+        self.button_images["register"] = button_img_register  # Mantenha a referência da imagem
+
         button_register = Button(
             self.window,
             image=button_img_register,
@@ -167,7 +171,7 @@ class View:
             entry = Entry(
                 register_window,
                 bd=0,
-                bg="#FFFDFD" if i != 2 else "#FFFFFF",
+                bg="#FFFDFD",
                 fg="#000716",
                 font=("Helvetica", 16),
                 show="*" if "Senha" in field else ""
@@ -181,6 +185,12 @@ class View:
                 text=field,
                 fill="#FFFFFF",
                 font=("Lato Medium", 18)
+            )
+            entry.place(
+                x=45.0,
+                y=140.0 + i * 100,
+                width=710.0,
+                height=30.0
             )
 
         def register():
@@ -222,6 +232,126 @@ class View:
             width=730.0,
             height=50.0
         )
+
+    def open_conversor_window(self):
+        conversor_window = Toplevel(self.window)
+        conversor_window.geometry("776x654")
+        conversor_window.configure(bg="#FFFFFF")
+        conversor_window.title("Conversor")
+
+        moeda = ['USD', 'BRL', 'EUR', 'CAD', 'AUD', 'CHF', 'JPY', 'RUB', 'INR', 'AOA']
+        self.dict_moedas = {
+            'USD': '$',
+            'BRL': 'R$',
+            'EUR': '€',
+            'CAD': 'C$',
+            'AUD': 'A$',
+            'CHF': 'Fr',
+            'JPY': '¥',
+            'RUB': 'RUB',
+            'INR': '₹',
+            'AOA': 'Kz'
+        }
+
+        canvas = Canvas(
+            conversor_window,
+            bg="#FFFFFF",
+            height=654,
+            width=776,
+            bd=0,
+            highlightthickness=0,
+            relief="ridge"
+        )
+        canvas.place(x=0, y=0)
+
+        image_image_1 = PhotoImage(file=(self.relative_to_assets("tela.png")))
+        canvas.create_image(388.0, 327.0, image=image_image_1)
+
+        canvas.create_text(
+            33.0,
+            241.0,
+            anchor="nw",
+            text="Digite o valor em",
+            fill="#000000",
+            font=("Inter Medium", 16 * -1)
+        )
+
+        self.app_resultado = Label(
+            conversor_window,
+            text='',
+            width=16,
+            height=2,
+            anchor='center',
+            font=('Ivy 15 bold'),
+            bg='#FFFFFF',
+            fg='#333333'
+        )
+        self.app_resultado.place(x=430, y=335, width=315, height=80)
+
+        self.entrada_valor = Entry(
+            conversor_window,
+            width=22,
+            justify='center',
+            font=('Ivy 12 bold'),
+            relief='solid',
+            bg='#FFFFFF',
+            fg='#000000'
+        )
+        self.entrada_valor.place(x=40, y=335, width=310, height=80)
+
+        self.moeda_de = StringVar()
+        self.moeda_de.set(moeda[0])
+        dropdown_de = OptionMenu(
+            conversor_window,
+            self.moeda_de,
+            *moeda
+        )
+        dropdown_de.config(
+            width=8,
+            font=('Ivy 12 bold'),
+            bg='#FFFFFF',
+            fg='#333333',
+            relief='solid'
+        )
+        dropdown_de.place(x=200, y=235)
+
+        self.moeda_para = StringVar()
+        self.moeda_para.set(moeda[1])
+        dropdown_para = OptionMenu(
+            conversor_window,
+            self.moeda_para,
+            *moeda
+        )
+        dropdown_para.config(
+            width=8,
+            font=('Ivy 12 bold'),
+            bg='#FFFFFF',
+            fg='#333333',
+            relief='solid'
+        )
+        dropdown_para.place(x=578, y=233, width=180, height=32)
+
+        canvas.create_text(
+            429.0,
+            237.0,
+            anchor="nw",
+            text="Esse é o valor em",
+            fill="#000000",
+            font=("Inter Medium", 16 * -1)
+        )
+
+        button_image_1 = PhotoImage(file=self.relative_to_assets("conversor_button.png"))
+        button_1 = Button(
+            conversor_window,
+            image=button_image_1,
+            highlightthickness=0,
+            command=self.controller.converter,
+            relief="flat",
+            bg="white" 
+        )
+        button_1.place(x=100, y=480, width=278, height=78)
+
+        conversor_window.mainloop()
 
     def start(self):
         self.window.resizable(False, False)

@@ -48,7 +48,7 @@ class Model:
         return error_message
 
     # Converter moeda
-    def converter_moeda(self, moeda_de_valor, moeda_para_valor, valor_entrada):
+    def converter_moeda(self, valor_entrada, moeda_de_valor, moeda_para_valor):
         url = f'{self.base_url}{moeda_de_valor}-{moeda_para_valor}'
         response = requests.get(url)
         if response.status_code == 200:

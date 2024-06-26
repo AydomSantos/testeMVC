@@ -3,7 +3,7 @@ import requests
 import mysql.connector
 from mysql.connector import Error
 
-class Model:
+class ConexaoBanco:
     def __init__(self):
         self.base_url = 'https://economia.awesomeapi.com.br/last/'
         self.db_config = {
@@ -28,6 +28,11 @@ class Model:
     def disconnect_db(self, conn):
         if conn.is_connected():
             conn.close()
+
+class Usuario(Model):
+
+    def __init__(self):
+        super().__init__()
 
     # Validação de email
     def is_valid_email(self, email):
@@ -124,7 +129,7 @@ class Model:
 # Testando a função de registro
 
 if __name__ == "__main__":
-    model = Model()
+    model = Usuario()
     result = model.register_user("Testateste", "joojoãoteste@gmail.com", "1234567890", "123")
     print(result)
 

@@ -1,6 +1,4 @@
-from models.model import Model
 from views.view import View
-from tkinter import messagebox
 
 class Controller:
     def __init__(self, model):

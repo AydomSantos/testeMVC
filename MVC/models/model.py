@@ -2,6 +2,7 @@ import re
 import requests
 import mysql.connector
 from mysql.connector import Error
+import argon2
 
 class ConexaoBanco:
     def __init__(self):
@@ -87,17 +88,18 @@ class Usuario(ConexaoBanco):
     # Autenticar usuário
     def authenticate_user(self, email, password):
         conn = self.conn_db()
+        ph = argon2.PasswordHasher()
         if not conn:
             return "Erro ao conectar ao banco de dados."
 
         try:
             cursor = conn.cursor()
             cursor.execute(
-                "SELECT * FROM usuario WHERE email_usuario = %s AND senha_usuario = %s",
-                (email, password)
+                "SELECT * FROM usuario WHERE email_usuario = %s",
+                (email)
             )
             user = cursor.fetchone()
-            return user if user else "Email ou senha incorretos."
+            return user if user and ph.verify(user[4], password) else "Email ou senha incorretos."
         except Error as e:
             return f"Erro ao autenticar usuário: {e}"
         finally:

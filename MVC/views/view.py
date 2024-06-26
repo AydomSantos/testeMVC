@@ -1,6 +1,7 @@
 from tkinter import Tk, Canvas, Entry, Button, PhotoImage, Label, Toplevel, StringVar, OptionMenu
-import pathlib
+import argon2
 from pathlib import Path
+
 class View:
     def __init__(self, controller):
         self.controller = controller
@@ -194,13 +195,14 @@ class View:
             )
 
         def register():
+            ph = argon2.PasswordHasher()
             values = [entry.get() for entry in entry_fields]
             error_message = self.controller.model.validate_register_inputs(*values)
 
             if error_message:
                 register_error_label.config(text=error_message, fg="red")
             else:
-                self.controller.model.register_user(values[0], values[1], values[2], values[3])
+                self.controller.model.register_user(values[0], values[1], values[2], ph.hash(values[3]))
                 register_error_label.config(text="Cadastro realizado com sucesso!", fg="green")
                 print("Cadastro realizado")
 

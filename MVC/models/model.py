@@ -73,6 +73,7 @@ class Usuario(ConexaoBanco):
             return "Erro ao conectar ao banco de dados."
 
         try:
+            print(name, email, phone, password)
             cursor = conn.cursor()
             cursor.execute(
             "INSERT INTO usuario(nome_usuario, email_usuario, telefone_usuario, senha_usuario) VALUES (%s, %s, %s, %s)",
@@ -95,12 +96,14 @@ class Usuario(ConexaoBanco):
         try:
             cursor = conn.cursor()
             cursor.execute(
-                "SELECT * FROM usuario WHERE email_usuario = %s",
-                (email)
+                f"SELECT * FROM usuario WHERE email_usuario = '{email}'"
             )
+            print('Até aqui')
             user = cursor.fetchone()
+            print(ph.verify(user[4], password))
             return user if user and ph.verify(user[4], password) else "Email ou senha incorretos."
         except Error as e:
+            print(e)
             return f"Erro ao autenticar usuário: {e}"
         finally:
             self.disconnect_db(conn)

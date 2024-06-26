@@ -120,6 +120,7 @@ class Usuario(ConexaoBanco):
         response = requests.get(url)
         if response.status_code == 200:
             data = response.json()
+            print(data)
             taxa_cambio = float(data[f'{moeda_de_valor}{moeda_para_valor}']['bid'])
             valor_convertido = valor_entrada * taxa_cambio
             return valor_convertido

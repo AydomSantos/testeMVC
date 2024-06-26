@@ -1,5 +1,4 @@
 from tkinter import Tk, Canvas, Entry, Button, PhotoImage, Label, Toplevel, StringVar, OptionMenu
-import pathlib
 from pathlib import Path
 class View:
     def __init__(self, controller):

@@ -3,15 +3,15 @@ import requests
 import mysql.connector
 from mysql.connector import Error
 
-class ConexaoBanco:
+class Model:
     def __init__(self):
         self.base_url = 'https://economia.awesomeapi.com.br/last/'
         self.db_config = {
             'host': 'localhost',
             'port': '3306',
-            'database': 'sistema_pi',  # Nome do banco de dados
+            'database': 'banco_de_dados',  # Nome do banco de dados
             'user': 'root',
-            'password': 'senac'
+            'password': 'aydon1234512345'
         }
 
     # Conectar ao banco de dados
@@ -28,11 +28,6 @@ class ConexaoBanco:
     def disconnect_db(self, conn):
         if conn.is_connected():
             conn.close()
-
-class Usuario(ConexaoBanco):
-
-    def __init__(self):
-        super().__init__()
 
     # Validação de email
     def is_valid_email(self, email):
@@ -74,7 +69,7 @@ class Usuario(ConexaoBanco):
         try:
             cursor = conn.cursor()
             cursor.execute(
-            "INSERT INTO usuario(nome_usuario, email_usuario, telefone_usuario, senha_usuario) VALUES (%s, %s, %s, %s)",
+            "INSERT INTO usuarios(nome, email, telefone, senha) VALUES (%s, %s, %s, %s)",
             (name, email, phone, password)
 )
             conn.commit()
@@ -93,7 +88,7 @@ class Usuario(ConexaoBanco):
         try:
             cursor = conn.cursor()
             cursor.execute(
-                "SELECT * FROM usuario WHERE email_usuario = %s AND senha_usuario = %s",
+                "SELECT * FROM usuarios WHERE email = %s AND senha = %s",
                 (email, password)
             )
             user = cursor.fetchone()
@@ -127,10 +122,10 @@ class Usuario(ConexaoBanco):
             raise Exception('Falha ao obter as taxas de câmbio. Tente novamente mais tarde.')
 
 # Testando a função de registro
-
+"""
 if __name__ == "__main__":
-    model = Usuario()
+    model = Model()
     result = model.register_user("Testateste", "joojoãoteste@gmail.com", "1234567890", "123")
     print(result)
-
+"""
 

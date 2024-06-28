@@ -1,4 +1,5 @@
 from views.view import View
+from models.model import Usuario
 
 class Controller:
     def __init__(self, model):
@@ -13,11 +14,11 @@ class Controller:
             self.view.error_label.config(text=error_message, fg="red")
         else:
             result = self.model.authenticate_user(email, senha)
-            if isinstance(result, str):
-                self.view.error_label.config(text=result, fg="red")
-            else:
+            if isinstance(result, tuple):
                 self.view.error_label.config(text="")
                 self.view.open_conversor_window()
+            else:
+                self.view.error_label.config(text=result, fg="red")
 
     def open_registration_window(self):
         self.view.open_registration_window()
@@ -26,8 +27,8 @@ class Controller:
         error_message = self.model.validate_register_inputs(name, email, phone, password, confirm_password)
         if error_message:
             return error_message
-        return self.model.register_user(name, email, phone, password) 
-    
+        return self.model.register_user(name, email, phone, password)
+
     def converter(self):
         valor = self.view.entrada_valor.get()
         moeda_de = self.view.moeda_de.get()
@@ -43,3 +44,9 @@ class Controller:
 
     def start(self):
         self.view.start()
+
+# Teste de inicialização do aplicativo
+if __name__ == "__main__":
+    model = Usuario()
+    controller = Controller(model)
+    controller.start()

@@ -10,13 +10,13 @@ class ConexaoBanco:
         self.db_config = {
             'host': 'localhost',
             'port': '3306',
-            'database': 'sistema_pi',  # Nome do banco de dados
+            'database': 'banco_de_dados',  # Nome do banco de dados
             'user': 'root',
-            'password': 'senac'
+            'password': 'aydon1234512345'
         }
 
-    # Conectar ao banco de dados
     def conn_db(self):
+        """Conectar ao banco de dados."""
         try:
             conn = mysql.connector.connect(**self.db_config)
             if conn.is_connected():
@@ -25,30 +25,29 @@ class ConexaoBanco:
             print("Erro ao conectar ao MySQL", e)
         return None
     
-    # Desconectar do banco de dados
     def disconnect_db(self, conn):
+        """Desconectar do banco de dados."""
         if conn.is_connected():
             conn.close()
 
 class Usuario(ConexaoBanco):
-
     def __init__(self):
         super().__init__()
 
-    # Validação de email
     def is_valid_email(self, email):
+        """Validar formato de email."""
         return re.match(r"[^@]+@[^@]+\.[^@]+", email) is not None
 
-    # Validação de telefone
     def is_valid_phone(self, phone):
+        """Validar formato de telefone."""
         return re.match(r"^\d{10,15}$", phone) is not None
 
-    # Verificar se as senhas correspondem
     def passwords_match(self, password, confirm_password):
+        """Verificar se as senhas correspondem."""
         return password == confirm_password
 
-    # Validar todos os campos de entrada de registro
     def validate_register_inputs(self, name, email, phone, password, confirm_password):
+        """Validar campos de entrada de registro."""
         error_message = ""
 
         if not name:
@@ -66,19 +65,19 @@ class Usuario(ConexaoBanco):
 
         return error_message
 
-    # Registrar usuário no banco de dados
     def register_user(self, name, email, phone, password):
+        """Registrar usuário no banco de dados."""
         conn = self.conn_db()
         if not conn:
             return "Erro ao conectar ao banco de dados."
 
         try:
-            print(name, email, phone, password)
+            hashed_password = argon2.PasswordHasher().hash(password)
             cursor = conn.cursor()
             cursor.execute(
-            "INSERT INTO usuario(nome_usuario, email_usuario, telefone_usuario, senha_usuario) VALUES (%s, %s, %s, %s)",
-            (name, email, phone, password)
-)
+                "INSERT INTO usuario(nome, email, telefone, senha) VALUES (%s, %s, %s, %s)",
+                (name, email, phone, hashed_password)
+            )
             conn.commit()
             return "Usuário registrado com sucesso."
         except Error as e:
@@ -86,30 +85,42 @@ class Usuario(ConexaoBanco):
         finally:
             self.disconnect_db(conn)
 
-    # Autenticar usuário
     def authenticate_user(self, email, password):
+        """Autenticar usuário."""
         conn = self.conn_db()
-        ph = argon2.PasswordHasher()
+        ph = argon2.PasswordHasher(
+            time_cost=10,  
+            memory_cost=65536,  
+            parallelism=1,
+            hash_len=32,
+        )
         if not conn:
             return "Erro ao conectar ao banco de dados."
 
         try:
             cursor = conn.cursor()
             cursor.execute(
-                f"SELECT * FROM usuario WHERE email_usuario = '{email}'"
+                "SELECT * FROM usuario WHERE email = %s",
+                (email,)
             )
-            print('Até aqui')
             user = cursor.fetchone()
-            print(ph.verify(user[4], password))
-            return user if user and ph.verify(user[4], password) else "Email ou senha incorretos."
+
+            if not user:
+                return "Email ou senha incorretos."
+
+            hashed_password = user[3]  
+
+            if ph.verify(hashed_password, password):
+                return user
+            else:
+                return "Email ou senha incorretos."
         except Error as e:
-            print(e)
             return f"Erro ao autenticar usuário: {e}"
         finally:
             self.disconnect_db(conn)
 
-    # Validar campos de entrada do login
     def validate_login_inputs(self, email, password):
+        """Validar campos de entrada do login."""
         error_message = ""
 
         if not email or not self.is_valid_email(email):
@@ -119,24 +130,23 @@ class Usuario(ConexaoBanco):
 
         return error_message
 
-    # Converter moeda
     def converter_moeda(self, valor_entrada, moeda_de_valor, moeda_para_valor):
+        """Converter moeda usando API externa."""
         url = f'{self.base_url}{moeda_de_valor}-{moeda_para_valor}'
-        response = requests.get(url)
-        if response.status_code == 200:
+        try:
+            response = requests.get(url)
+            response.raise_for_status()
             data = response.json()
-            print(data)
             taxa_cambio = float(data[f'{moeda_de_valor}{moeda_para_valor}']['bid'])
             valor_convertido = valor_entrada * taxa_cambio
             return valor_convertido
-        else:
-            raise Exception('Falha ao obter as taxas de câmbio. Tente novamente mais tarde.')
+        except requests.exceptions.RequestException as e:
+            raise Exception(f'Falha na requisição HTTP: {e}')
+        except (KeyError, ValueError) as e:
+            raise Exception(f'Erro ao processar resposta da API: {e}')
 
 # Testando a função de registro
-
 if __name__ == "__main__":
     model = Usuario()
     result = model.register_user("Testateste", "joojoãoteste@gmail.com", "1234567890", "123")
     print(result)
-
-

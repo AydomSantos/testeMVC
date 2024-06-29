@@ -1,14 +1,14 @@
 from tkinter import Tk, Canvas, Entry, Button, PhotoImage, Label, Toplevel, StringVar, OptionMenu
-import argon2
 from pathlib import Path
-
+import argon2
+# from controllers.controller import Controller
 class View:
     def __init__(self, controller):
         self.controller = controller
         self.window = Tk()
         self.window.geometry("800x800")
         self.window.configure(bg="#F39421")
-        self.button_images = {}  # Dicionário para manter a referência das imagens
+        self.button_images = {}  
         self.login_window()
 
     def relative_to_assets(self, path: str) -> str:
@@ -353,7 +353,7 @@ class View:
             bg="white" 
         )
         button_1.place(x=100, y=480, width=278, height=78)
-
+        
         conversor_window.mainloop()
 
     def start(self):

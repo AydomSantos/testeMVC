@@ -1,9 +1,10 @@
+from models.model import Usuario, ConversorDeMoedas
 from views.view import View
-from models.model import Usuario
 
 class Controller:
     def __init__(self, model):
         self.model = model
+        self.conversor = ConversorDeMoedas()
         self.view = View(self)
 
     def valida_login(self):
@@ -35,7 +36,7 @@ class Controller:
         moeda_para = self.view.moeda_para.get()
         try:
             valor = float(valor)
-            resultado = self.model.converter_moeda(valor, moeda_de, moeda_para)
+            resultado = self.conversor.converter_valor(valor, moeda_de, moeda_para)
             self.view.app_resultado.config(text=f'{resultado:.2f}')
         except ValueError:
             self.view.app_resultado.config(text="Entrada de valor inválida")
@@ -44,9 +45,3 @@ class Controller:
 
     def start(self):
         self.view.start()
-
-# Teste de inicialização do aplicativo
-if __name__ == "__main__":
-    model = Usuario()
-    controller = Controller(model)
-    controller.start()

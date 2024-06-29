@@ -130,9 +130,13 @@ class Usuario(ConexaoBanco):
 
         return error_message
 
-    def converter_moeda(self, valor_entrada, moeda_de_valor, moeda_para_valor):
-        """Converter moeda usando API externa."""
+class ConversorDeMoedas(ConexaoBanco):
+    def __init__(self):
+        super().__init__()
+    
+    def converter_valor(self, valor_entrada, moeda_de_valor, moeda_para_valor):
         url = f'{self.base_url}{moeda_de_valor}-{moeda_para_valor}'
+        
         try:
             response = requests.get(url)
             response.raise_for_status()
@@ -144,9 +148,3 @@ class Usuario(ConexaoBanco):
             raise Exception(f'Falha na requisição HTTP: {e}')
         except (KeyError, ValueError) as e:
             raise Exception(f'Erro ao processar resposta da API: {e}')
-
-# Testando a função de registro
-if __name__ == "__main__":
-    model = Usuario()
-    result = model.register_user("Testateste", "joojoãoteste@gmail.com", "1234567890", "123")
-    print(result)

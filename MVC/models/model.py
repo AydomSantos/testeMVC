@@ -143,8 +143,33 @@ class ConversorDeMoedas(ConexaoBanco):
             data = response.json()
             taxa_cambio = float(data[f'{moeda_de_valor}{moeda_para_valor}']['bid'])
             valor_convertido = valor_entrada * taxa_cambio
+            
+            # Registrar a conversão no banco de dados
+            self.registrar_conversao(moeda_de_valor, moeda_para_valor, taxa_cambio, valor_entrada, valor_convertido)
+            
             return valor_convertido
+           
         except requests.exceptions.RequestException as e:
             raise Exception(f'Falha na requisição HTTP: {e}')
         except (KeyError, ValueError) as e:
             raise Exception(f'Erro ao processar resposta da API: {e}')
+        
+    def registrar_conversao(self, moeda_de_valor, moeda_para_valor, taxa_cambio, valor_entrada, valor_convertido):
+        conn = self.conn_db()
+        if conn is None:
+            raise Exception('Erro ao conectar ao banco de dados.')
+        
+        try:
+            cursor = conn.cursor()
+        
+            query = """
+                INSERT INTO currency_conversion (source_currency, target_currency, exchange_rate, amount_to_convert, converted_amount)
+                VALUES (%s, %s, %s, %s, %s)
+                """
+            cursor.execute(query, (moeda_de_valor, moeda_para_valor, taxa_cambio, valor_entrada, valor_convertido))
+            conn.commit()
+        except Exception as e:
+            raise Exception(f'Erro ao inserir dados no banco de dados: {e}')
+        finally:
+            cursor.close()
+            self.disconnect_db(conn)

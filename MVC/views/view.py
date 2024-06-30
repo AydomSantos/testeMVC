@@ -354,6 +354,16 @@ class View:
         )
         button_1.place(x=100, y=480, width=278, height=78)
         
+        button_icon_historico = PhotoImage(file=self.relative_to_assets("button_historico.png"))
+        button_icon = Button(
+            conversor_window,
+            image=button_icon_historico,
+            highlightthickness=0,
+            relief="flat",
+            bg="#F3751A"            
+        )
+        button_icon.place(x=690, y=10, width=80, height=78)
+        
         conversor_window.mainloop()
 
     def start(self):

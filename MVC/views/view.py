@@ -1,4 +1,4 @@
-from tkinter import Tk, Canvas, Entry, Button, PhotoImage, Label, Toplevel, StringVar, OptionMenu
+from tkinter import Tk, ttk, Canvas, Entry, Button, PhotoImage, Label, Toplevel, StringVar, OptionMenu
 from pathlib import Path
 import argon2
 # from controllers.controller import Controller
@@ -235,7 +235,6 @@ class View:
             width=730.0,
             height=50.0
         )
-
     def open_conversor_window(self):
         conversor_window = Toplevel(self.window)
         conversor_window.geometry("776x654")
@@ -360,12 +359,51 @@ class View:
             image=button_icon_historico,
             highlightthickness=0,
             relief="flat",
-            bg="#F3751A"            
+            bg="#F3751A",
+            command= self.open_historico           
         )
         button_icon.place(x=690, y=10, width=80, height=78)
         
         conversor_window.mainloop()
 
+    def open_historico(self):
+        historico_window = Toplevel(self.window)
+        historico_window.geometry("1200x400")
+        historico_window.title("Historico de Conversão")
+        historico_window.configure(bg="#F9F2ED")
+        
+        titulo = Label(historico_window, text="Histórico de conversão", bg="#F9F2ED", fg="#000000", font=("Helvetica", 16))
+        titulo.place(x=20, y=20) 
+        
+        colunas = ("origem", "destino", "taxa", "valor", "resultado")
+        
+        # Estilo do Treeview
+        style = ttk.Style()
+        style.configure("Custom.Treeview", background="#FFFFFF", foreground="#000000", fieldbackground="#1F1F1F")
+        style.map("Custom.Treeview", background=[("selected", "#FFA500")], foreground=[("selected", "white")])
+        
+        tree = ttk.Treeview(historico_window, columns=colunas, show="headings", style="Custom.Treeview")
+        tree.pack(expand=True)
+        
+        # Definindo os cabeçalhos das colunas
+        tree.heading("origem", text="Moeda de Origem")
+        tree.heading("destino", text="Moeda de Destino")
+        tree.heading("taxa", text="Taxa de Câmbio")
+        tree.heading("valor", text="Valor a Converter")
+        tree.heading("resultado", text="Resultado final")
+        
+        # Definindo a largura das colunas
+        tree.column("origem", width=200)
+        tree.column("destino", width=200)
+        tree.column("taxa", width=150)
+        tree.column("valor", width=150)
+        tree.column("resultado", width=150)
+        
+        historico = []
+        
+        
+        
+        
     def start(self):
         self.window.resizable(False, False)
         self.window.mainloop()

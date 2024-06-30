@@ -366,9 +366,9 @@ class View:
         
         conversor_window.mainloop()
 
-    def open_historico(self):
+    def open_historico(self, *dados):
         historico_window = Toplevel(self.window)
-        historico_window.geometry("1200x400")
+        historico_window.geometry("1005x400")
         historico_window.title("Historico de Conversão")
         historico_window.configure(bg="#F9F2ED")
         
@@ -383,7 +383,7 @@ class View:
         style.map("Custom.Treeview", background=[("selected", "#FFA500")], foreground=[("selected", "white")])
         
         tree = ttk.Treeview(historico_window, columns=colunas, show="headings", style="Custom.Treeview")
-        tree.pack(expand=True)
+        tree.place(x=0, y=80)
         
         # Definindo os cabeçalhos das colunas
         tree.heading("origem", text="Moeda de Origem")
@@ -391,18 +391,17 @@ class View:
         tree.heading("taxa", text="Taxa de Câmbio")
         tree.heading("valor", text="Valor a Converter")
         tree.heading("resultado", text="Resultado final")
+    
         
-        # Definindo a largura das colunas
-        tree.column("origem", width=200)
-        tree.column("destino", width=200)
-        tree.column("taxa", width=150)
-        tree.column("valor", width=150)
-        tree.column("resultado", width=150)
+         # Definindo os cabeçalhos das colunas
+        for coluna in colunas:
+            tree.heading(coluna, text=coluna)
         
-        historico = []
-        
-        
-        
+        # Inserir os dados no Treeview
+        for row in dados:
+            tree.insert("", "end", values=row)
+    
+        historico_window.mainloop()
         
     def start(self):
         self.window.resizable(False, False)

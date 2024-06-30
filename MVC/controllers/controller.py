@@ -43,5 +43,14 @@ class Controller:
         except Exception as e:
             self.view.app_resultado.config(text=str(e))
 
-    def start(self):
-        self.view.start()
+    def mostrar_historico(self):
+        print("Aqui")
+        try:
+            historico_dados = self.conversor.obter_historico() 
+            print(historico_dados)
+            self.view.open_historico(historico_dados)  
+        except Exception as e:
+            print(f"Erro ao obter histórico: {e}")
+            
+            
+   

@@ -368,6 +368,7 @@ class View:
     
 
     def open_historico(self):
+        self.controller.mostrar_historico()
         historico_window = Toplevel(self.window)
         historico_window.geometry("1005x400")
         historico_window.title("Histórico de Conversão")

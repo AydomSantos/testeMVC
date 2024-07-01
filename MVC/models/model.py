@@ -176,55 +176,20 @@ class ConversorDeMoedas(ConexaoBanco):
 
     def obter_historico(self):
         conn = self.conn_db()
-        if conn is None:
-            raise Exception('Erro ao conectar ao banco de dados.')
-
-        cursor = None  
         try:
+            if conn is None:
+                raise Exception('Erro ao conectar ao banco de dados.')
+            
             cursor = conn.cursor()
             consulta = ("SELECT source_currency, target_currency, exchange_rate, amount_to_convert, converted_amount FROM currency_conversion")
+            conn.commit()
             cursor.execute(consulta)
             historico = cursor.fetchall()
-            print(historico)
-            return historico
+            return historico  
         except Exception as e:
             raise Exception(f'Erro ao obter histórico do banco de dados: {e}')
         finally:
             if cursor:
                 cursor.close()
-                self.disconnect_db(conn)
-    
-        conn = self.conn_db()
-        if conn is None:
-            raise Exception('Erro ao conectar ao banco de dados.')
-
-        cursor = None  
-        try:
-            cursor = conn.cursor()
-            consulta = ("SELECT source_currency, target_currency, exchange_rate, amount_to_convert, converted_amount FROM currency_conversion")
-            cursor.execute(consulta)
-            historico = cursor.fetchall()
-            return historico
-        except Exception as e:
-            raise Exception(f'Erro ao obter histórico do banco de dados: {e}')
-        finally:
-            if cursor:
-                cursor.close()
-                self.disconnect_db(conn)
-        conn = self.conn_db()
-        if conn is None:
-            raise Exception('Erro ao conectar ao banco de dados.')
-
-        cursor = None  
-        try:
-            cursor = conn.cursor()
-            consulta = ("SELECT source_currency, target_currency, exchange_rate, amount_to_convert, converted_amount FROM currency_conversion")
-            cursor.execute(consulta)
-            historico = cursor.fetchall()
-            return historico
-        except Exception as e:
-            raise Exception(f'Erro ao obter histórico do banco de dados: {e}')
-        finally:
-            if cursor:
-                cursor.close()
-                self.disconnect_db(conn)
+            self.disconnect_db(conn)
+        

@@ -6,6 +6,7 @@ class Controller:
         self.model = model
         self.conversor = ConversorDeMoedas()
         self.view = View(self)
+        self.historico_dados = [] 
 
     def valida_login(self):
         email = self.view.entry_email.get()
@@ -44,11 +45,10 @@ class Controller:
             self.view.app_resultado.config(text=str(e))
 
     def mostrar_historico(self):
-        print("Aqui")
         try:
-            historico_dados = self.conversor.obter_historico() 
-            print(historico_dados)
-            self.view.open_historico(historico_dados)  
+            self.historico_dados = self.conversor.obter_historico()
+            print(self.historico_dados)
+            self.view.open_historico()  
         except Exception as e:
             print(f"Erro ao obter histórico: {e}")
             

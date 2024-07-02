@@ -1,2 +1,16 @@
 - adcionar um id nos paraemtros de consulta para retorna apenas o historico exclusivo de cada usuario 
 - adciona uma chave estrangeira na tabela historico tendo como referencia a tabela clientes 
+
+
+cracao do banco de dados 
+
+Tabela de conversão de moedas 
+
+CRETE TABLE IF NOT EXISTS converso_historico(
+    i_id_historico_conversao int AI PK 
+    d_moeda_fonte_historico_conversao decimal(10,2) 
+    d_moeda_alvo_historico_conversao decimal(10,2) 
+    d_taxa_de_cambio_historico_conversao decimal(10,2) 
+    d_quantidade_para_converter_historico_conversao decimal(10,2) 
+    d_valor_convertido_historico_conversao decimal(10,2)
+)

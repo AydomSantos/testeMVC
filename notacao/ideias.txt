@@ -4,9 +4,19 @@
 
 cracao do banco de dados 
 
-Tabela de conversão de moedas 
+CRIAÇÃO DO BANCO DE DADOS DO SISTEMA
 
-CRETE TABLE IF NOT EXISTS converso_historico(
+CREATE DATABASE IF NOT EXISTS 
+
+CREATE TABLE IF NOT EXISTS usuario(
+    id int AI PK 
+    nome_usuario char(50) 
+    email_usuario char(50) 
+    telefone_usuario char(50) 
+    senha_usuario varchar(255)
+)
+
+CREATE TABLE IF NOT EXISTS converso_historico(
     i_id_historico_conversao int AI PK 
     d_moeda_fonte_historico_conversao decimal(10,2) 
     d_moeda_alvo_historico_conversao decimal(10,2) 

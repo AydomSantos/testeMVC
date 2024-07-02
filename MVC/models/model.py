@@ -163,7 +163,7 @@ class ConversorDeMoedas(ConexaoBanco):
             cursor = conn.cursor()
         
             query = """
-                INSERT INTO currency_conversion (source_currency, target_currency, exchange_rate, amount_to_convert, converted_amount)
+                INSERT INTO historico_conversao (d_moeda_fonte_historico_conversao, d_moeda_alvo_historico_conversao, d_taxa_de_cambio_historico_conversao, d_quantidade_para_converter_historico_conversao, d_valor_convertido_historico_conversao)
                 VALUES (%s, %s, %s, %s, %s)
                 """
             cursor.execute(query, (moeda_de_valor, moeda_para_valor, taxa_cambio, valor_entrada, valor_convertido))
@@ -174,14 +174,15 @@ class ConversorDeMoedas(ConexaoBanco):
             cursor.close()
             self.disconnect_db(conn)
 
-    def obter_historico(self):
+    def obter_historico(self, id):
+        
         conn = self.conn_db()
         try:
             if conn is None:
                 raise Exception('Erro ao conectar ao banco de dados.')
             
             cursor = conn.cursor()
-            consulta = ("SELECT source_currency, target_currency, exchange_rate, amount_to_convert, converted_amount FROM currency_conversion")
+            consulta = ("SELECT * FROM historico_conversao WHERE id = %s", (id))
             conn.commit()
             cursor.execute(consulta)
             historico = cursor.fetchall()

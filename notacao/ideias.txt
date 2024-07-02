@@ -1,0 +1,2 @@
+- adcionar um id nos paraemtros de consulta para retorna apenas o historico exclusivo de cada usuario 
+- adciona uma chave estrangeira na tabela historico tendo como referencia a tabela clientes 

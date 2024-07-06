@@ -1,2 +1,5 @@
 definir uma Class Pessoa 
 e adcionar uma maneira de salvar , editar e deletar
+
+
+Adcionar a Class Conversão e adcionar os mesmos metodos da classe anterior 

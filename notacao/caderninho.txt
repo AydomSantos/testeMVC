@@ -3,3 +3,7 @@ e adcionar uma maneira de salvar , editar e deletar
 
 
 Adcionar a Class Conversão e adcionar os mesmos metodos da classe anterior 
+
+Conrolador faz validação dos inputs das viws para que os dados errados não chegue no model 
+
+view pega as informações dos inputs das telas e passa para o controlador 

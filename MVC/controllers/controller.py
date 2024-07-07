@@ -1,4 +1,43 @@
-from models.model import Usuario, ConversorDeMoedas
+
+from models.model import Pessoa
+from views.view import View
+from argon2 import PasswordHasher, exceptions
+
+class PessoaController():
+    def __init__(self, model, view):
+        self.model = model
+        self.view = view
+        self.ph = PasswordHasher()
+    
+    def validar_login(self):
+        email = self.view.entry_email.get()
+        senha = self.view.entry_senha.get()
+        
+        try:
+            # Busca a pessoa pelo email no banco de dados
+            pessoa = self.model.busca_pelo_email(email)
+
+            if pessoa:
+                #Verificar senha usando argon2
+                try:
+                    self.ph.verify(pessoa.senha_hash, senha)
+                    self.view.mostrar_mensagem('Login realizado com sucesso!')
+                    # Aqui voçê pode redirecionar para outra tela, se necessario
+                except exceptions.VerifyMismatchError:
+                    self.view.mostrar_mensagem("Senha incorreta!")
+            else:
+                self.view.mostrar_mensagem("Email nâo encontrado!")
+                
+        except Exception as e:
+            self.view.mostrar_mensagem(f"Erro ao validar login {str(e)}")
+            
+                
+        
+        
+            
+ """
+   
+   from models.model import Usuario, ConversorDeMoedas
 from views.view import View
 
 class Controller:
@@ -51,6 +90,5 @@ class Controller:
             self.view.open_historico()  
         except Exception as e:
             print(f"Erro ao obter histórico: {e}")
-            
-            
    
+   """

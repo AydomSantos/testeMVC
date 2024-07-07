@@ -1,12 +1,13 @@
 import sqlite3
 
 class Pessoa():
-    def __init__(self, nome, email, telefone, senha, id = None):
+    def __init__(self, nome, email, telefone, senha, senha_hash, id = None):
         self.id = id
         self.nome = nome
         self.email = email
         self.telefone = telefone
         self.senha = senha
+        self.senha_hash = senha_hash
         
     def cadastrar(self):
         conn = sqlite3.connect("conversor.db")
@@ -43,27 +44,28 @@ class Pessoa():
         conn.commit()
         cursor.close()
         conn.close()
+    
+    def buscar_pelo_email(self, email):
+        try:
+            conn = sqlite3.connect('conversor.db')  
+            cursor = conn.cursor()       
             
-        
-
-# fazendo o cadastro do usuario
-
-#pessoa_um = Pessoa("Duda", "dudu@gmail.com", 2451448541, "123")
-#pessoa_um.cadastrar()
-
-# ==============================================================
-
-# faz a edição dos usuarios
-
-# pessoa_um.id = 1
-# pessoa_um.nome = "Aydom Atualizado"
-# pessoa_um.email = "aydom@gmail.com"
-# pessoa_um.telefone = 54785214785
-# pessoa_um.senha = "senha atualizada"
-# pessoa_um.editar()
-
-# =================================================
-
+            cursor.execute('SELECT id, nome, email, senha_hash FROM pessoas WHERE email = ?', (email,)) 
+            result = cursor.fetchone()
+            
+            if result:
+                pessoa = Pessoa(*result)
+                return pessoa  
+            else:
+                return None
+            
+        except sqlite3.Error as e:
+            print(f"Erro ao acessar SQLite: {e}")
+            return None
+        finally:
+            cursor.close()
+            conn.close()
+            
 class Conversor():
     def __init__(self, usuario, data_conversao, moeda_entrada, moeda_saida, valor_entrada, valor_saida, cotacao, id=None):
         self.id = id
@@ -110,19 +112,5 @@ class Conversor():
         conn.close()
         
 
-# Criar uma nova conversão e cadastrá-la
-conversao = Conversor("Usuário Teste", "2024-07-06", "USD", "BRL", 100.0, 500.0, 5.0)
-conversao.cadastrar()
-print("Conversão cadastrada.")
 
-conversao.id = 1
-conversao.usuario = "Usuário Atualizado"
-conversao.data_conversao = "2024-07-07"
-conversao.moeda_entrada = "EUR"
-conversao.moeda_saida = "BRL"
-conversao.valor_entrada = 200.0
-conversao.valor_saida = 1000.0
-conversao.cotacao = 5.0
-conversao.editar()
-print("Conversão editada.")
 

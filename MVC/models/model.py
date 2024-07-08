@@ -9,14 +9,15 @@ class Pessoa():
         self.telefone = telefone
         self.senha = senha
       
-class PessoaRepository:    
+class PessoaRepository:       
     def cadastrar(self, pessoa: Pessoa) -> None:
         conn = sqlite3.connect("conversor.db")
         cursor = conn.cursor()
         cursor.execute('INSERT INTO usuarios (nome, email, telefone, senha) VALUES (?, ?, ?, ?)', (pessoa.nome, pessoa.email, pessoa.telefone, pessoa.senha))
         conn.commit()
         
-        
+
+            
     def editar(self, pessoa: Pessoa) -> None:
         conn = sqlite3.connect("conversor.db")
         cursor = conn.cursor()
@@ -83,8 +84,7 @@ class ConversaoRepository:
         INSERT INTO conversoes (usuario, data_conversao, moeda_entrada, moeda_saida, valor_entrada, valor_saida, cotacao)
         VALUES (?, ?, ?, ?, ?, ?, ?)             
         """, (conversor.usuario, conversor.data_conversao, conversor.moeda_entrada, conversor.moeda_saida, conversor.valor_entrada, conversor.valor_saida, conversor.cotacao))
-        conn.commit()
-        
+        conn.commit()      
     
     def editar(self, conversao: Conversao) -> None:
         if conversao.id is None:
@@ -109,5 +109,3 @@ class ConversaoRepository:
         conn.commit()
         cursor.close()
         conn.close()
-
-

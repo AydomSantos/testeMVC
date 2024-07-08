@@ -1,6 +1,5 @@
 from tkinter import Tk, ttk, Canvas, Entry, Button, PhotoImage, Label, Toplevel, StringVar, OptionMenu
 from pathlib import Path
-import argon2
 # from controllers.controller import Controller
 class View:
     def __init__(self, controller):
@@ -195,7 +194,6 @@ class View:
             )
 
         def register():
-            ph = argon2.PasswordHasher()
             values = [entry.get() for entry in entry_fields]
             error_message = self.controller.model.validate_register_inputs(*values)
 

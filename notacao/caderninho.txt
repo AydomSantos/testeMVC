@@ -7,3 +7,31 @@ Adcionar a Class Conversão e adcionar os mesmos metodos da classe anterior
 Conrolador faz validação dos inputs das viws para que os dados errados não chegue no model 
 
 view pega as informações dos inputs das telas e passa para o controlador 
+
+
+08/07/2024
+
+GUIA:
+currency_converter/
+|-- models/
+|   |-- user.py
+|   |-- currency.py
+|-- views/
+|   |-- login_view.py
+|   |-- register_view.py
+|   |-- converter_view.py
+|-- controllers/
+|   |-- auth_controller.py
+|   |-- converter_controller.py
+|-- utils/
+|   |-- database.py
+|   |-- hashing.py
+|-- main.py
+
+Oque ja foi criado :
+Class Pessoa / Controllers Pessoa
+
+desenvolver a logica da tela de login e register , segindo os principios de SOLID
+
+a validção do campo login foi feita - falta testa se esta funcionando
+

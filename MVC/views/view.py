@@ -106,7 +106,7 @@ class View:
             image=button_img_login,
             borderwidth=0,
             highlightthickness=0,
-            command=self.controller.valida_login()
+            command=self.controller.valida_login
         )
         button_login.place(
             x=250.8,
@@ -210,7 +210,7 @@ class View:
             if error_message:
                 register_error_label.config(text=error_message, fg="red")
             else:
-                self.controller.model.register_user(values[0], values[1], values[2])
+                self.controller.cadastrar_usuario(values[0], values[1], values[2])
                 register_error_label.config(text="Cadastro realizado com sucesso!", fg="green")
                 print("Cadastro realizado")
 

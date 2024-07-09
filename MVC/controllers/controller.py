@@ -2,7 +2,7 @@ from models.model import Pessoa, Conversao
 from views.view import View
 
 class AuthController:
-    def __init__(self, view, model):
+    def __init__(self,model, view):
         self.model = model
         self.view = view
         
@@ -32,7 +32,7 @@ class PessoController:
     def cadastrar_usuario(self, nome, email, telefone, senha):
         try:
             novo_usuario = Pessoa(nome=nome, email=email, telefone=telefone, senha=senha)
-            self.model.cadastrar(novo_usuario)
+            self.view.register(novo_usuario)
             self.view.mostrar_mensagem('Usuário cadastrado com sucesso!')
         except Exception as e:
              self.view.mostrar_mensagem(f"Erro ao cadastrar usuário: {str(e)}")
@@ -56,7 +56,7 @@ class ConversaoController:
         
         try:
             valor = float(valor)
-            resultado = self.conversor.converter_valor(valor, moeda_origem, moeda_destino)
+            resultado = self.conversor(valor, moeda_origem, moeda_destino)
             self.view.mostrar_resultado(resultado)
         except ValueError:
             self.view.mostrar_mensagem("Valor inválido para conversão!")

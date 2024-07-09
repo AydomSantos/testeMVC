@@ -30,8 +30,9 @@ currency_converter/
 
 Oque ja foi criado :
 Class Pessoa / Controllers Pessoa
+Class Conversor / Corntroller Conversor 
 
-desenvolver a logica da tela de login e register , segindo os principios de SOLID
 
-a validção do campo login foi feita - falta testa se esta funcionando
-
+Erro : 
+1. PessoController.__init__() missing 1 required positional argument: 'view'
+2. AttributeError: 'PessoController' object has no attribute 'valida_login'

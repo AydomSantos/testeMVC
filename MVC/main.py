@@ -1,6 +1,6 @@
 
 from tkinter import Tk
-from controllers.controller import AuthController,PessoController  
+from controllers.controller import *
 from views.view import View  
 
 def main():

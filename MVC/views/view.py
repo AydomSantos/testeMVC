@@ -4,17 +4,18 @@ from controllers.controller import *
 
 # from controllers.controller import Controller
 class View:
-    # 
-    def __init__(self):
-        self.controller = AuthController()
-        self.controller_register = PessoController()
-        self.controller_conversor = ConversaoController()
+    # Construtor da class View
+
+    def __init__(self, controller):
+        self.controller = controller
         self.window = Tk()
         self.window.geometry("800x800")
         self.window.configure(bg="#F39421")
         self.button_images = {}  
         self.login_window()
-
+    
+    # ================================================================
+    # função responsavel por encontra a pastas de imagens e adcionalas 
     def relative_to_assets(self, path: str) -> str:
         script_dir = Path(__file__).parent
         assets_path = script_dir.parent / "assets" / "img"
@@ -22,6 +23,8 @@ class View:
         print(full_path)  # Adicione este print para depuração
         return str(full_path)
 
+    # ==================================================================
+    # tela de Login
     def login_window(self):
         canvas = Canvas(
             self.window,
@@ -121,7 +124,7 @@ class View:
             image=button_img_register,
             borderwidth=0,
             highlightthickness=0,
-            command=self.controller_register.abrir_janela_registro
+            command=self.controller.abrir_janela_registro
         )
         button_register.place(
             x=250.0,
@@ -144,6 +147,8 @@ class View:
             height=50.0
         )
 
+    # ==================================================================
+    # tela de cadastro de conta
     def open_registration_window(self):
         register_window = Toplevel(self.window)
         register_window.geometry("800x800")
@@ -239,6 +244,8 @@ class View:
             height=50.0
         )
     
+    # ==================================================================
+    # tela de conversão de moedas 
     def open_conversor_window(self):
         conversor_window = Toplevel(self.window)
         conversor_window.geometry("776x654")
@@ -351,7 +358,7 @@ class View:
             conversor_window,
             image=button_image_1,
             highlightthickness=0,
-            command=self.controller_conversor.converter_moeda,
+            command=self.controller.converter_moeda,
             relief="flat",
             bg="white" 
         )
@@ -370,8 +377,10 @@ class View:
         
         conversor_window.mainloop()
     
+    # ==================================================================
+    # tela de historico
     def open_historico(self):
-        self.controller_conversor.mostrar_historico_conversoes()
+        self.controller.mostrar_historico_conversoes()
         historico_window = Toplevel(self.window)
         historico_window.geometry("1005x400")
         historico_window.title("Histórico de Conversão")
@@ -399,7 +408,8 @@ class View:
             tree.insert("", "end", values=row)
     
         historico_window.mainloop()
-        
+
+    # ================================================================= 
     def start(self):
         self.window.resizable(False, False)
         self.window.mainloop()

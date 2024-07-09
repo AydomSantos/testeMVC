@@ -106,7 +106,7 @@ class View:
             image=button_img_login,
             borderwidth=0,
             highlightthickness=0,
-            command=self.controller.valida_login
+            command=self.controller.valida_login()
         )
         button_login.place(
             x=250.8,

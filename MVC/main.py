@@ -5,7 +5,7 @@ from views.view import View
 
 def main():
     root = Tk()
-    app = PessoController()
+    app = PessoController(root)
     view = View(app)
     view.start()  # Inicia a interface gráfica
     root.mainloop()

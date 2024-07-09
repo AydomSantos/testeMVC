@@ -97,8 +97,7 @@ class ConversaoRepository:
         WHERE id = ?                           
         """,(conversao.usuario, conversao.data_conversao, conversao.moeda_entrada, conversao.moeda_saida, conversao.valor_entrada, conversao.valor_saida, conversao.cotacao, conversao.id))
         conn.commit()
-        cursor.close()
-        conn.close()
+        
     
     def excluir(self, conversao: Conversao) -> None:
         if conversao.id is None:
@@ -107,5 +106,11 @@ class ConversaoRepository:
         cursor = conn.cursor()
         cursor.execute('DELETE FROM conversoes WHERE id = ?', (conversao.id,))
         conn.commit()
-        cursor.close()
-        conn.close()
+        
+    
+    def historico_conversao(self, conversao: Conversao):
+        conn = sqlite3.connect('conversor.db')
+        cursor = conn.cursor()
+        cursor.execute('SELECT * FROM conversoes WHERE id = ?', (conversao.id))
+        cursor.fetchall()
+        conn.commit()

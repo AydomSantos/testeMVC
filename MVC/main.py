@@ -1,7 +1,7 @@
 
 from tkinter import Tk
-from controllers.controller import AuthController,PessoController  # Importe o controlador principal necessário
-from views.view import View  # Importe sua classe View principal
+from controllers.controller import AuthController,PessoController  
+from views.view import View  
 
 def main():
     root = Tk()

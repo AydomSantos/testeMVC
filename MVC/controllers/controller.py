@@ -2,9 +2,9 @@ from models.model import Pessoa, Conversao
 from views.view import View
 
 class AuthController:
-    def __init__(self, model, view):
-        self.model = model
-        self.view = view
+    def __init__(self):
+        self.model = Pessoa
+        self.view = View
         
     def valida_login(self):
         email = self.view.entry_email.get()
@@ -25,9 +25,9 @@ class AuthController:
          return pessoa.senha == senha
 
 class PessoController:
-    def __init__(self, model, view):
-        self.model = model
-        self.view = view(self)
+    def __init__(self):
+        self.model = Pessoa
+        self.view = View
     
     def cadastrar_usuario(self, nome, email, telefone, senha):
         try:
@@ -41,10 +41,9 @@ class PessoController:
         self.view.abrir_janela_registro()
 
 class ConversaoController:
-    def __init__(self, conversor, view):
-        self.conversor = conversor 
-        self.view = view
-        self.historico_dados = []
+    def __init__(self):
+        self.conversor = Conversao
+        self.view = View
     
     def iniciar_aplicacao(self):
         # Lógica para iniciar a aplicação

@@ -1,5 +1,6 @@
 from tkinter import Tk, ttk, Canvas, Entry, Button, PhotoImage, Label, Toplevel, StringVar, OptionMenu
 from pathlib import Path
+
 # from controllers.controller import Controller
 class View:
     def __init__(self, controller):
@@ -200,7 +201,7 @@ class View:
             if error_message:
                 register_error_label.config(text=error_message, fg="red")
             else:
-                self.controller.model.register_user(values[0], values[1], values[2], ph.hash(values[3]))
+                self.controller.model.register_user(values[0], values[1], values[2])
                 register_error_label.config(text="Cadastro realizado com sucesso!", fg="green")
                 print("Cadastro realizado")
 

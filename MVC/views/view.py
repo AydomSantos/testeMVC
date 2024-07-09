@@ -1,6 +1,6 @@
 from tkinter import Tk, ttk, Canvas, Entry, Button, PhotoImage, Label, Toplevel, StringVar, OptionMenu
 from pathlib import Path
-from controllers.controller import * 
+
 
 # from controllers.controller import Controller
 class View:

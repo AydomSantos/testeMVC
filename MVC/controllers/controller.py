@@ -38,7 +38,7 @@ class PessoController:
              self.view.mostrar_mensagem(f"Erro ao cadastrar usuário: {str(e)}")
 
     def abrir_janela_registro(self):
-        self.view.abrir_janela_registro()
+        self.view.open_registration_window()
 
 class ConversaoController:
     def __init__(self):

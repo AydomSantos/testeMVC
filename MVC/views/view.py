@@ -1,10 +1,14 @@
 from tkinter import Tk, ttk, Canvas, Entry, Button, PhotoImage, Label, Toplevel, StringVar, OptionMenu
 from pathlib import Path
+from controllers.controller import * 
 
 # from controllers.controller import Controller
 class View:
-    def __init__(self, controller):
-        self.controller = controller
+    # 
+    def __init__(self):
+        self.controller = AuthController()
+        self.controller_register = PessoController()
+        self.controller_conversor = ConversaoController()
         self.window = Tk()
         self.window.geometry("800x800")
         self.window.configure(bg="#F39421")
@@ -117,7 +121,7 @@ class View:
             image=button_img_register,
             borderwidth=0,
             highlightthickness=0,
-            command=self.controller.open_registration_window
+            command=self.controller_register.abrir_janela_registro
         )
         button_register.place(
             x=250.0,
@@ -234,6 +238,7 @@ class View:
             width=730.0,
             height=50.0
         )
+    
     def open_conversor_window(self):
         conversor_window = Toplevel(self.window)
         conversor_window.geometry("776x654")
@@ -346,7 +351,7 @@ class View:
             conversor_window,
             image=button_image_1,
             highlightthickness=0,
-            command=self.controller.converter,
+            command=self.controller_conversor.converter_moeda,
             relief="flat",
             bg="white" 
         )
@@ -365,9 +370,8 @@ class View:
         
         conversor_window.mainloop()
     
-
     def open_historico(self):
-        self.controller.mostrar_historico()
+        self.controller_conversor.mostrar_historico_conversoes()
         historico_window = Toplevel(self.window)
         historico_window.geometry("1005x400")
         historico_window.title("Histórico de Conversão")
